@@ -4,3 +4,4 @@ yad2_parser/__pycache__
 .DS_Store
 stage/re_ads.csv
 stage/re_ads.json
+stage/re_ads_unique.json

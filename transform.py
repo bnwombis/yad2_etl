@@ -11,6 +11,7 @@ logging.basicConfig(level=logging.INFO)
 stage_pages_path = "stage/re_pages"
 stage_csv_fn = "stage/re_ads.csv"
 stage_json_fn = "stage/re_ads.json"
+stage_json_unique = "stage/re_ads_unique.json"
 
 def process_pages():
     fp_out_csv = open(stage_csv_fn, "w")
@@ -63,6 +64,12 @@ def process_pages():
         fp_json.write(json_string)
     return ads
 
+def unique_ads():
+    df_ads = pd.read_json(stage_json_fn)
+    df_ads = df_ads.drop_duplicates(subset=['item_id'], keep='last')
+    df_ads.to_json(stage_json_unique)
+
 if not os.path.exists(stage_json_fn):
     process_pages()
 
+unique_ads()
