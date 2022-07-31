@@ -11,3 +11,4 @@ input_data/cities.csv
 input_data/cities.json
 stage/re_ads_city_cleaned.json
 stage/re_ads_city_mapped.json
+load/*
