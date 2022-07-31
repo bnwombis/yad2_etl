@@ -2,3 +2,5 @@ stage/re_pages/*
 yad2_parser/__pycache__
 .ipynb_checkpoints
 .DS_Store
+stage/re_ads.csv
+stage/re_ads.json
