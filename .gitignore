@@ -1,4 +1,3 @@
-stage/re_pages/*
 yad2_parser/__pycache__
 .ipynb_checkpoints
 .DS_Store
@@ -11,4 +10,3 @@ input_data/cities.csv
 input_data/cities.json
 stage/re_ads_city_cleaned.json
 stage/re_ads_city_mapped.json
-load/*
