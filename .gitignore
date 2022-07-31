@@ -1,0 +1,4 @@
+stage/re_pages/*
+yad2_parser/__pycache__
+.ipynb_checkpoints
+.DS_Store
