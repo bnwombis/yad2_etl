@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 from lxml import etree
 from time import sleep
+import pathlib
 
 def init_selenium(chromedriver_path="/opt/homebrew/bin/chromedriver"):
     global driver
@@ -16,6 +17,7 @@ def init_selenium(chromedriver_path="/opt/homebrew/bin/chromedriver"):
 def init_parser():
     """Open main page and check for captcha
     if show captcha wait for user to resolve it"""
+    pathlib.Path("stage/re_pages/").mkdir(parents=True, exist_ok=True)
     url = "http://yad2.co.il/"
     driver.get(url)
     page_source = driver.page_source
