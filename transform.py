@@ -13,6 +13,8 @@ stage_csv_fn = "stage/re_ads.csv"
 stage_json_fn = "stage/re_ads.json"
 stage_json_unique_fn = "stage/re_ads_unique.json"
 stage_json_city_mapped_fn = "stage/re_ads_city_mapped.json"
+stage_json_cleaned_fn = "stage/re_ads_city_cleaned.json"
+
 
 def process_pages():
     fp_out_csv = open(stage_csv_fn, "w")
@@ -43,18 +45,10 @@ def process_pages():
                 title_elements = title.split(",")
                 ad["city_name"] = title_elements[-1].strip()
                 ad["price"] = element.find(class_="price").text.strip().replace(' ₪', '').replace(',', '')
-                if ad["price"] == "לא צוין מחיר":
-                    ad["price"] == "-1"
                 ad["date"] = element.find(class_="showDateInLobby").text.strip()
-                
                 ad["rooms"] = element.find(class_="data rooms-item").find(class_="val").text.strip()
-                if ad["rooms"] == "-":
-                    ad["rooms"] = "0"
-                
                 ad["square"] = element.find(class_="data SquareMeter-item").find(class_="val").text.strip()
                 ad["floor"] = element.find(class_="data floor-item").find(class_="val").text.strip()
-                if ad["floor"] == "קרקע":
-                    ad["floor"] = "0"
                 csv_string = ";".join(ad.values())
                 fp_out_csv.write(csv_string + '\n')
                 ads.append(ad)
@@ -90,3 +84,10 @@ if not os.path.exists(stage_json_fn):
 
 unique_ads()
 map_cities_en()
+
+df_ads = pd.read_json(stage_json_city_mapped_fn)
+df_ads = df_ads.drop(df_ads[df_ads["price"]=="לא צוין מחיר"].index)
+# TODO count zero rooms+ground+floor+small square as parking
+df_ads = df_ads.drop(df_ads.loc[df_ads["rooms"] == "-"].index)
+df_ads.loc[df_ads["floor"] == "קרקע", "floor"] = "0"
+df_ads.to_json(stage_json_cleaned_fn)

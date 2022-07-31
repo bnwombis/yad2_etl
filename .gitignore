@@ -5,3 +5,9 @@ yad2_parser/__pycache__
 stage/re_ads.csv
 stage/re_ads.json
 stage/re_ads_unique.json
+map_cities.ipynb
+input_data/cities_en_map.csv
+input_data/cities.csv
+input_data/cities.json
+stage/re_ads_city_cleaned.json
+stage/re_ads_city_mapped.json
