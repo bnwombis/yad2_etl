@@ -1,2 +1,2 @@
 # yad2_parser
-Parser real estate ads from yad2.co.il
+Parser real estate data from yad2.co.il
