@@ -11,7 +11,8 @@ logging.basicConfig(level=logging.INFO)
 stage_pages_path = "stage/re_pages"
 stage_csv_fn = "stage/re_ads.csv"
 stage_json_fn = "stage/re_ads.json"
-stage_json_unique = "stage/re_ads_unique.json"
+stage_json_unique_fn = "stage/re_ads_unique.json"
+stage_json_city_mapped_fn = "stage/re_ads_city_mapped.json"
 
 def process_pages():
     fp_out_csv = open(stage_csv_fn, "w")
@@ -67,9 +68,25 @@ def process_pages():
 def unique_ads():
     df_ads = pd.read_json(stage_json_fn)
     df_ads = df_ads.drop_duplicates(subset=['item_id'], keep='last')
-    df_ads.to_json(stage_json_unique)
+    df_ads.to_json(stage_json_unique_fn)
+
+def map_cities_en():
+    df_cities = pd.read_csv("input_data/cities_map.csv", delimiter=";")
+    df_ads = pd.read_json(stage_json_fn)
+
+    df_cities = df_cities.set_index("city_name_he")
+    df_ads = df_ads.set_index("city_name")
+
+    df_ads = df_ads.join(df_cities)
+    df_ads = df_ads.drop_duplicates(subset=['item_id'], keep='last')
+
+    df_ads = df_ads.dropna()
+    df_ads = df_ads.set_index("item_id")
+
+    df_ads.to_json(stage_json_city_mapped_fn)
 
 if not os.path.exists(stage_json_fn):
     process_pages()
 
 unique_ads()
+map_cities_en()
