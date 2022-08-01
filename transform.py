@@ -79,15 +79,16 @@ def map_cities_en():
 
     df_ads.to_json(stage_json_city_mapped_fn)
 
+def clean_dat():
+    df_ads = pd.read_json(stage_json_city_mapped_fn)
+    df_ads = df_ads.drop(df_ads[df_ads["price"]=="לא צוין מחיר"].index)
+    df_ads.loc[df_ads["floor"] == "קרקע", "floor"] = "0"
+    df_ads.loc[df_ads['rooms'] == "-", 'rooms'] = "0"
+    df_ads = df_ads.drop(df_ads[df_ads["square"]=="לא צוין"].index)
+    df_ads.to_json(stage_json_cleaned_fn)
+    
 if not os.path.exists(stage_json_fn):
     process_pages()
 
 unique_ads()
 map_cities_en()
-
-df_ads = pd.read_json(stage_json_city_mapped_fn)
-df_ads = df_ads.drop(df_ads[df_ads["price"]=="לא צוין מחיר"].index)
-# TODO count zero rooms+ground+floor+small square as parking
-df_ads = df_ads.drop(df_ads.loc[df_ads["rooms"] == "-"].index)
-df_ads.loc[df_ads["floor"] == "קרקע", "floor"] = "0"
-df_ads.to_json(stage_json_cleaned_fn)
